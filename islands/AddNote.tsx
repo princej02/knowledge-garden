@@ -3,7 +3,6 @@ import { useState } from "preact/hooks";
 import { Button } from "../components/Button.tsx";
 import { Input } from "../components/Input.tsx";
 import NoteEditor from "./NoteEditor.tsx";
-import { slugify } from "../lib/utils.ts";
 
 
 export default function AddNote() {
@@ -15,19 +14,15 @@ export default function AddNote() {
   async function handleSubmit(e: Event) {
     e.preventDefault();
 
-    const id = slugify(title);
     const tagList = tags.split(",").map((t) => t.trim()).filter(Boolean);
 
     const payload = {
-      id,
-      content: {
-        title,
-        tags: tagList,
-        content,
-      },
+      title,
+      tags: tagList,
+      content
     };
 
-    const res = await fetch("/api/notes", {
+    const res = await fetch("/api/notes/new", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
